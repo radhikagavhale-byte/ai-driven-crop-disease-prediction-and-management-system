@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Prediction History | AI Crop Disease System</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f8f5;
+            color: #26332b;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #198754, #146c43);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .header p {
+            margin: 8px 0 0;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        /* Main */
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: 35px auto;
+        }
+
+        /* Summary */
+        .summary {
+            background: white;
+            border-radius: 16px;
+            padding: 22px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .summary h3 {
+            margin: 0;
+            color: #198754;
+            font-size: 18px;
+        }
+
+        .summary-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #26332b;
+            margin-top: 8px;
+        }
+
+        /* Section title */
+        .section-title {
+            color: #198754;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* History Card */
+        .history-card {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+
+            display: flex;
+            align-items: center;
+            gap: 25px;
+
+            transition: 0.2s;
+        }
+
+        .history-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .history-image {
+            width: 180px;
+            height: 140px;
+            object-fit: cover;
+            border-radius: 14px;
+            border: 3px solid #e5f2ea;
+        }
+
+        .details {
+            flex: 1;
+        }
+
+        .prediction-label {
+            font-size: 13px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
+        .prediction {
+            color: #198754;
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 35px;
+            flex-wrap: wrap;
+        }
+
+        .info-box {
+            background: #f1f8f4;
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+
+        .info-title {
+            font-size: 12px;
+            color: #777;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Empty state */
+        .empty {
+            background: white;
+            padding: 50px 25px;
+            border-radius: 18px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .empty-icon {
+            font-size: 45px;
+        }
+
+        .empty h2 {
+            color: #198754;
+        }
+
+        .empty p {
+            color: #666;
+        }
+
+        /* Buttons */
+        .buttons {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            margin: 5px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 9px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .btn:hover {
+            background: #146c43;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #343a40;
+        }
+
+        .btn-secondary:hover {
+            background: #212529;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Mobile */
+        @media (max-width: 700px) {
+
+            .history-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .history-image {
+                width: 100%;
+                height: 210px;
+            }
+
+            .info-row {
+                justify-content: center;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+
+    <div class="header">
+
+        <h1>🌱 AI Crop Disease Prediction System</h1>
+
+        <p>
+            Prediction History & Analysis
+        </p>
+
+    </div>
+
+
+    <!-- Main -->
+
+    <div class="container">
+
+
+        <!-- Summary -->
+
+        <div class="summary">
+
+            <h3>
+                Total Predictions
+            </h3>
+
+            <div class="summary-number">
+                {{ predictions|length }}
+            </div>
+
+        </div>
+
+
+        {% if predictions %}
+
+        <h2 class="section-title">
+            📋 Previous Predictions
+        </h2>
+
+
+        <!-- Prediction List -->
+
+        {% for item in predictions %}
+
+        <div class="history-card">
+
+
+            <!-- Image -->
+
+            <img
+                src="{{ url_for('static', filename='uploads/' + item[1]) }}"
+                alt="Crop Image"
+                class="history-image"
+            >
+
+
+            <!-- Details -->
+
+            <div class="details">
+
+                <div class="prediction-label">
+                    AI Prediction Result
+                </div>
+
+                <div class="prediction">
+                    🌿 {{ item[2] }}
+                </div>
+
+
+                <div class="info-row">
+
+
+                    <div class="info-box">
+
+                        <div class="info-title">
+                            Confidence
+                        </div>
+
+                        <div class="info-value">
+                            📊 {{ item[3] }}%
+                        </div>
+
+                    </div>
+
+
+                    <div class="info-box">
+
+                        <div class="info-title">
+                            Date & Time
+                        </div>
+
+                        <div class="info-value">
+                            📅 {{ item[4] }}
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+
+        {% else %}
+
+
+        <!-- Empty State -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                📭
+            </div>
+
+            <h2>
+                No Predictions Yet
+            </h2>
+
+            <p>
+                Upload a crop image to get your first AI disease prediction.
+            </p>
+
+            <a href="/" class="btn">
+                🌱 Make Prediction
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- Buttons -->
+
+        <div class="buttons">
+
+            <a href="/" class="btn">
+                🏠 Home
+            </a>
+
+            <a href="/dashboard" class="btn btn-secondary">
+                📊 Dashboard
+            </a>
+
+            <a href="/history" class="btn">
+                🔄 Refresh
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+
+    <div class="footer">
+
+        AI-based preliminary crop disease prediction and management system
+
+    </div>
+
+</body>
+</html>
