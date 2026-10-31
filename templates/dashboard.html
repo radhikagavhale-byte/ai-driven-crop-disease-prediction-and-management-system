@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard - AI Crop Disease Prediction</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef8f1, #ffffff);
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #198754, #0b5133);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: #198754;
+            margin-bottom: 30px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px 15px;
+            text-align: center;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        }
+
+        .icon {
+            font-size: 35px;
+        }
+
+        .card h2 {
+            font-size: 30px;
+            margin: 10px 0;
+            color: #198754;
+        }
+
+        .card p {
+            margin: 0;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .info {
+            background: white;
+            margin-top: 30px;
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+        }
+
+        .info h2 {
+            color: #198754;
+            text-align: center;
+        }
+
+        .prediction {
+            text-align: left;
+            padding: 15px;
+            margin: 12px 0;
+            border: 1px solid #e9ecef;
+            border-radius: 12px;
+            background: #f8f9fa;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            margin: 5px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #146c43;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 25px;
+            background: #0b5133;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 800px) {
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>🌱 AI Crop Disease Prediction System</h1>
+        <p>📊 Smart Prediction Dashboard</p>
+    </div>
+
+
+    <div class="container">
+
+        <h2 class="title">Prediction Analytics</h2>
+
+
+        <!-- SUMMARY CARDS -->
+
+        <div class="cards">
+
+            <div class="card">
+                <div class="icon">📊</div>
+                <h2>{{ total }}</h2>
+                <p>Total Predictions</p>
+            </div>
+
+
+            <div class="card">
+                <div class="icon">🌱</div>
+                <h2>{{ healthy }}</h2>
+                <p>Healthy Crops</p>
+            </div>
+
+
+            <div class="card">
+                <div class="icon">🦠</div>
+                <h2>{{ diseased }}</h2>
+                <p>Diseased Crops</p>
+            </div>
+
+
+            <div class="card">
+                <div class="icon">🎯</div>
+                <h2>{{ avg_confidence }}%</h2>
+                <p>Average Confidence</p>
+            </div>
+
+        </div>
+
+
+        <!-- DISEASE STATISTICS -->
+         <div class="info">
+
+    <h2>🌱 Crop Health Overview</h2>
+
+    <div style="
+        display:flex;
+        justify-content:center;
+        gap:40px;
+        flex-wrap:wrap;
+        margin-top:25px;
+    ">
+
+        <div style="text-align:center;">
+            <div style="
+                width:120px;
+                height:120px;
+                border-radius:50%;
+                background:#198754;
+                color:white;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:28px;
+                font-weight:bold;
+                margin:auto;
+            ">
+                {{ health_data.healthy }}
+            </div>
+
+            <p><strong>🌱 Healthy</strong></p>
+        </div>
+
+
+        <div style="text-align:center;">
+            <div style="
+                width:120px;
+                height:120px;
+                border-radius:50%;
+                background:#dc3545;
+                color:white;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                font-size:28px;
+                font-weight:bold;
+                margin:auto;
+            ">
+                {{ health_data.diseased }}
+            </div>
+
+            <p><strong>🦠 Diseased</strong></p>
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="info">
+
+            <h2>📊 Disease Prediction Statistics</h2>
+
+            {% if disease_stats %}
+
+                {% for disease, count in disease_stats %}
+
+                    <p style="text-align:left; margin:15px 0;">
+                        <strong>{{ disease }}</strong>
+                        — {{ count }} prediction(s)
+                    </p>
+
+                    <div style="
+                        background:#e9ecef;
+                        border-radius:10px;
+                        height:12px;
+                        margin-bottom:15px;
+                    ">
+
+                        <div style="
+                            background:#198754;
+                            width:{{ (count / total * 100) if total > 0 else 0 }}%;
+                            height:12px;
+                            border-radius:10px;
+                        "></div>
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p style="text-align:center;">
+                    No prediction statistics available yet.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- RECENT PREDICTIONS -->
+
+        <div class="info">
+
+            <h2>🕒 Recent Predictions</h2>
+
+            {% if recent_predictions %}
+
+                {% for image_name, disease, confidence, date_time in recent_predictions %}
+
+                    <div class="prediction">
+
+                        <strong>🌱 {{ disease }}</strong>
+
+                        <br>
+
+                        🎯 Confidence: {{ confidence }}%
+
+                        <br>
+
+                        🕒 {{ date_time }}
+
+                    </div>
+
+                {% endfor %}
+
+            {% else %}
+
+                <p style="text-align:center;">
+                    No recent predictions available.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- AI OVERVIEW -->
+
+        <div class="info">
+
+            <h2>🤖 AI Analysis Overview</h2>
+
+            <p style="text-align:center;">
+                This dashboard provides a quick overview of
+                crop disease predictions made by the AI system.
+            </p>
+
+            <p style="text-align:center;">
+                Predictions are stored securely in the project
+                database for future analysis.
+            </p>
+
+        </div>
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+            <a href="/" class="btn">
+                🏠 Home
+            </a>
+
+            <a href="/history" class="btn">
+                📚 Prediction History
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        AI-based preliminary crop disease prediction system
+
+        <br><br>
+
+        Developed for Academic Project
+
+    </div>
+
+</body>
+</html>
