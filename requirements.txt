@@ -3,3 +3,5 @@ tensorflow
 Pillow
 gunicorn
 numpy
+opencv-python-headless
+reportlab
