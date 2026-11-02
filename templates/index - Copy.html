@@ -489,18 +489,24 @@
 
 
 
-    document.querySelector("form").addEventListener("submit", function() {
+    document.querySelector("form").addEventListener("submit", function(event) {
 
-        const button = document.querySelector("button");
+    const fileInput = document.querySelector('input[name="image"]');
 
-        button.innerHTML = "⏳ Analyzing Image...";
+    if (!fileInput.files.length) {
+        event.preventDefault();
+        alert("Please select a crop image first.");
+        return;
+    }
 
-        button.disabled = true;
-        document.getElementById("loadingMessage").style.display = "block";
+    const button = this.querySelector('button[type="submit"]');
 
-        button.style.opacity = "0.7";
+    button.innerHTML = "⏳ Analyzing Image...";
+    button.disabled = true;
 
-    });
+    document.getElementById("loadingMessage").style.display = "block";
+
+});
 
 
     </script>
