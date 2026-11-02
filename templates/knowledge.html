@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Disease Knowledge Center</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef8f1, #ffffff);
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #198754, #0b5133);
+            color: white;
+            text-align: center;
+            padding: 35px 20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 32px;
+        }
+
+        .header p {
+            margin-top: 10px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .title {
+            text-align: center;
+            color: #198754;
+            margin-bottom: 30px;
+        }
+
+        .disease-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .disease-card {
+            background: white;
+            padding: 22px;
+            border-radius: 18px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+            transition: 0.3s;
+        }
+
+        .disease-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .disease-card h2 {
+            color: #198754;
+            font-size: 20px;
+        }
+
+        .disease-card h3 {
+            color: #555;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .disease-card p {
+            line-height: 1.6;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 35px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 13px 25px;
+            margin: 5px;
+            background: #198754;
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+        }
+
+        .btn:hover {
+            background: #146c43;
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 25px;
+            background: #0b5133;
+            color: white;
+            text-align: center;
+        }
+
+        @media (max-width: 850px) {
+
+            .disease-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 550px) {
+
+            .disease-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header h1 {
+                font-size: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+
+        <h1>📚 Disease Knowledge Center</h1>
+
+        <p>
+            AI Crop Disease Information & Management Guide
+        </p>
+
+    </div>
+
+
+    <div class="container">
+
+        <h2 class="title">
+            🌱 Crop Disease Information
+        </h2>
+
+
+        <div class="disease-grid">
+
+            {% for disease, info in disease_info.items() %}
+
+            <div class="disease-card">
+
+                <h2>
+                    🌿 {{ disease.replace("___", " — ").replace("_", " ") }}
+                </h2>
+
+                <h3>
+                    🔍 Symptoms
+                </h3>
+
+                <p>
+                    {{ info["symptoms"] }}
+                </p>
+
+                <h3>
+                    🌱 Management & Prevention
+                </h3>
+
+                <p>
+                    {{ info["management"] }}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="buttons">
+
+            <a href="/" class="btn">
+                🏠 Home
+            </a>
+
+            <a href="/dashboard" class="btn">
+                📊 Dashboard
+            </a>
+
+            <a href="/history" class="btn">
+                📚 Prediction History
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer">
+
+        AI-based preliminary crop disease prediction system
+
+        <br><br>
+
+        Developed for Academic Project
+
+    </div>
+
+</body>
+
+</html>
