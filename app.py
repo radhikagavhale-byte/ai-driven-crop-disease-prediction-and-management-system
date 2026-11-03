@@ -1,6 +1,10 @@
 
-from flask import Flask, render_template, request, redirect, send_file
+from from flask import Flask, render_template, request, redirect, send_file
 from database import create_database, save_prediction
+
+import os
+os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+
 import tensorflow as tf
 import numpy as np
 from PIL import Image
